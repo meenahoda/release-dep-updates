@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Release Dependency Updates",
+  "name": "This is just something small to help generate changes for release stories on clubhouse rather than have to manually write it :)",
   "icons": [
     {
       "src": "favicon.ico",
