@@ -56,6 +56,12 @@ class Container extends React.Component {
             )
           })}
         </div>
+
+        {
+          this.state.diff.length
+            ? <button onClick={() => navigator.clipboard.writeText(this.state.diff.join('\n'))}>Copy to clipboard</button>
+            : ''
+        }
       </div>
     )
   }
