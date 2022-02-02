@@ -27,7 +27,7 @@ class Container extends React.Component {
       const before = JSON.parse(this.state.packageBefore).dependencies
       const after = JSON.parse(this.state.packageAfter).dependencies
 
-      const result = GenerateDiff(before, after)
+      const result = GenerateDiff(before, after, 'table')
       this.setState({ diff: result })
     } catch (e) {
       console.log('ERROR')
@@ -50,9 +50,9 @@ class Container extends React.Component {
         <div>
           <h3>{this.state.diff.length ? 'Output:' : ''}</h3>
 
-          {this.state.diff.map(e => {
+          {this.state.diff.map((e, i) => {
             return (
-              <div>{e}</div>
+              <div key={i}>{e}</div>
             )
           })}
         </div>
