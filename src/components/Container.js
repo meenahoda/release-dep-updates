@@ -9,7 +9,7 @@ class Container extends React.Component {
     super(props)
 
     this.textInputChange = this.textInputChange.bind(this)
-    this.getDiff = this.getDiff.bind(this)
+    this.compare = this.compare.bind(this)
 
     this.state = {
       packageBefore: JSON.stringify(ExampleBefore, null, 2),
@@ -22,12 +22,13 @@ class Container extends React.Component {
     this.setState({ [id]: value })
   }
 
-  getDiff () {
+  compare () {
     try {
       const before = JSON.parse(this.state.packageBefore).dependencies
       const after = JSON.parse(this.state.packageAfter).dependencies
 
       const result = GenerateDiff(before, after, 'table')
+      console.log(result)
       this.setState({ diff: result })
     } catch (e) {
       console.log('ERROR')
@@ -39,13 +40,22 @@ class Container extends React.Component {
     return (
       <div>
         <div style={{paddingBottom: '20px'}}>
-          This is just something small to help generate changes for release stories on clubhouse rather than have to manually write it :)
+          Generates difference in dependencies between 2 states of a package.json file.
+        </div>
+        <div style={{paddingBottom: '20px'}}>
+          Use this to help produce documentation for a release.
         </div>
 
-        <TextInput id="packageBefore" value={this.state.packageBefore} onTextInputChange={this.textInputChange} title="Paste package.json here BEFORE ncu -u" />
-        <TextInput id="packageAfter" value={this.state.packageAfter} onTextInputChange={this.textInputChange} title="Paste package.json here AFTER ncu -u" />
+        <TextInput id="packageBefore" value={this.state.packageBefore} onTextInputChange={this.textInputChange} title="Paste package.json here BEFORE ncu -u (e.g. master branch)" />
+        <TextInput id="packageAfter" value={this.state.packageAfter} onTextInputChange={this.textInputChange} title="Paste package.json here AFTER ncu -u (e.g. release branch)" />
 
-        <button onClick={this.getDiff}>Get diff</button>
+        <button onClick={this.compare} style={{marginRight: '10px'}}>Compare</button>
+
+        {
+          this.state.diff.length
+            ? <button onClick={() => navigator.clipboard.writeText(this.state.diff.join('\n'))}>Copy to clipboard</button>
+            : ''
+        }
 
         <div>
           <h3>{this.state.diff.length ? 'Output:' : ''}</h3>
@@ -56,12 +66,6 @@ class Container extends React.Component {
             )
           })}
         </div>
-
-        {
-          this.state.diff.length
-            ? <button onClick={() => navigator.clipboard.writeText(this.state.diff.join('\n'))}>Copy to clipboard</button>
-            : ''
-        }
       </div>
     )
   }
